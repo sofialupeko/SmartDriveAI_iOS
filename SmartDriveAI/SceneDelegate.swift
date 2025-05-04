@@ -5,6 +5,7 @@
 //  Created by Lupeko Sofia on 14.02.2025.
 //
 
+import Swinject
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -18,6 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let scene = (scene as? UIWindowScene) else { return }
+        
+        Container.prepareRootContainer()
         
         window = UIWindow(windowScene: scene)
         window?.overrideUserInterfaceStyle = .dark
@@ -84,9 +87,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         vc.output = presenter
         presenter.view = vc
 
-//        let interactor = ProfileInteractor()
-//        presenter.interactor = interactor
-//        interactor.output = presenter
+        let interactor = ProfileInteractor()
+        presenter.interactor = interactor
+        interactor.output = presenter
+        
+        let router = ProfileRouter()
+        presenter.router = router
+        router.view = vc
         
         return UINavigationController(rootViewController: vc)
     }
@@ -99,9 +106,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         vc.output = presenter
         presenter.view = vc
 
-//        let interactor = ProfileInteractor()
-//        presenter.interactor = interactor
-//        interactor.output = presenter
+        let interactor = TripsListInteractor()
+        presenter.interactor = interactor
+        interactor.output = presenter
         
         return UINavigationController(rootViewController: vc)
     }

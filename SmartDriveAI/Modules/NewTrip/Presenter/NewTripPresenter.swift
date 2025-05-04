@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import Swinject
+
+import UIKit //
 
 enum NewTripState {
     case readyToStart
@@ -25,25 +28,25 @@ final class NewTripPresenter {
 
     weak var view: NewTripViewInput?
     var interactor: NewTripInteractorInput?
+    
+    @LazyAutoInject var dataCollector: DataCollector
+    private let builder: NewTripViewModelBuilder = NewTripViewModelBuilderImp()
 
     private var email: String = ""
     private var password: String = ""
     private var timer: Timer?
     private var duration: TimeInterval = 0 {
         didSet {
-            view?.updateTimerValue(duration.formatted())
+            view?.updateTimerValue(builder.buildTimerValue(duration))
         }
     }
     private var state: NewTripState = .readyToStart {
         didSet {
             switch state {
             case .readyToStart:
-                view?.setupReadyToStartState()
-                duration = 0
-                removeTimer()
+                dataCollector.stopAndSave()
             case .inProcess:
-                view?.setupInProcessState()
-                setupTimerIfNeeded()
+                dataCollector.startCollectData()
             }
         }
     }
@@ -52,6 +55,7 @@ final class NewTripPresenter {
 // MARK: NewTripViewOutput
 extension NewTripPresenter: NewTripViewOutput {
     func viewIsReady() {
+        dataCollector.delegate = self
         interactor?.moduleIsReady()
         view?.setupInitialState()
     }
@@ -69,6 +73,44 @@ extension NewTripPresenter: NewTripInteractorOutput {
     
     func sendNewTripFailed(error: any Error) {
         print("sendNewTripFailed: \(error)")
+    }
+}
+
+// MARK: DataCollectorDelegate
+extension NewTripPresenter: DataCollectorDelegate {
+    func collectDataStart() {
+        view?.setupInProcessState(animated: true)
+        setupTimerIfNeeded()
+    }
+    
+    func collectDataStop() {
+        view?.setupReadyToStartState(animated: true)
+        duration = 0
+        removeTimer()
+    }
+    
+    func dataWasSaved(to url: URL) {
+        let activityViewController = UIActivityViewController(
+            activityItems: [url],
+            applicationActivities: nil
+        )
+        if let topController = UIApplication.shared.windows.first?.rootViewController {
+            topController.present(
+                activityViewController,
+                animated: true,
+                completion: nil
+            )
+        }
+        
+        print("Данные успешно сохранены в \(url)")
+    }
+    
+    func dataSaveError(_ error: any Error) {
+        print("Ошибка сохранения данных: \(error)")
+    }
+    
+    func sensorsError() {
+        print("Ошибка доступа к датчикам. Настройте доступы в настройках")
     }
 }
 

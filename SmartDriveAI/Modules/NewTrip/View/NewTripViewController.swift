@@ -19,6 +19,9 @@ final class NewTripViewController: UIViewController {
     private lazy var durationLabel = makeDurationLabel()
     private lazy var timerLabel = makeTimerLabel()
     private lazy var startStopButton = makeStartStopButton()
+    
+    private lazy var timerContainerCollapsedHeight: NSLayoutConstraint = timerContainer.heightAnchor.constraint(equalToConstant: 0)
+    private lazy var timerContainerTitleSpacing: NSLayoutConstraint = timerContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,23 +37,61 @@ extension NewTripViewController: NewTripViewInput {
         view.backgroundColor = .white
         commonInit()
         addTargets()
-        setupReadyToStartState()
+        setupReadyToStartState(animated: false)
     }
     
     func updateTimerValue(_ value: String) {
         timerLabel.text = value
     }
     
-    func setupReadyToStartState() {
-        titleLabel.text = "New trip"
-        startStopButton.isSelected = false
-        timerContainer.isHidden = true
+    func setupReadyToStartState(animated: Bool = false) {
+        let action: () -> Void = { [weak self] in
+            self?.timerContainerCollapsedHeight.isActive = true
+            self?.timerContainerTitleSpacing.constant = 0
+            self?.view.layoutIfNeeded()
+        }
+        let completion: () -> Void = { [weak self] in
+            self?.titleLabel.text = "New trip"
+            self?.startStopButton.isSelected = false
+            self?.timerContainer.isHidden = true
+        }
+        if animated {
+            UIView.animate(
+                withDuration: 0.3
+            ) {
+                action()
+            } completion: { _ in
+                completion()
+            }
+        } else {
+            action()
+            completion()
+        }
     }
 
-    func setupInProcessState() {
-        titleLabel.text = "Trip is recording"
-        startStopButton.isSelected = true
-        timerContainer.isHidden = false
+    func setupInProcessState(animated: Bool = false) {
+        let action: () -> Void = { [weak self] in
+            self?.timerContainerCollapsedHeight.isActive = false
+            self?.timerContainerTitleSpacing.constant = 24
+            self?.view.layoutIfNeeded()
+        }
+        let completion: () -> Void = { [weak self] in
+            self?.titleLabel.text = "Trip is recording"
+            self?.startStopButton.isSelected = true
+            self?.timerContainer.isHidden = false
+        }
+        if animated {
+            UIView.animate(
+                withDuration: 0.3
+            ) {
+                action()
+            } completion: { _ in
+                completion()
+            }
+        } else {
+            action()
+            completion()
+        }
     }
 }
 
@@ -73,6 +114,8 @@ private extension NewTripViewController {
         
         startStopButton.setTitle("Start", for: .normal)
         startStopButton.setTitle("Stop", for: .selected)
+        durationLabel.text = "Trip duration"
+        timerLabel.text = "00:00:00"
     }
     
     func setupLayout() {
@@ -96,11 +139,12 @@ private extension NewTripViewController {
             make.leading.trailing.equalToSuperview().inset(24)
         }
         timerContainer.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.leading.trailing.equalToSuperview()
         }
+        timerContainerCollapsedHeight.isActive = false
+        timerContainerTitleSpacing.isActive = true
         startStopButton.snp.makeConstraints { make in
-            make.top.equalTo(timerContainer.snp.bottom).offset(54)
+            make.top.equalTo(timerContainer.snp.bottom).offset(32)
             make.leading.trailing.equalToSuperview().inset(24)
             make.height.equalTo(44)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(32)
@@ -114,9 +158,11 @@ private extension NewTripViewController {
         }
     }
 
-    func makeBackgroundView() -> UIView {
-        let view = UIView()
-        view.backgroundColor = .lightGray
+    func makeBackgroundView() -> UIImageView {
+        let view = UIImageView()
+        view.image = UIImage(named: "background")
+        view.contentMode = .scaleAspectFill
+        view.isUserInteractionEnabled = true
         return view
     }
     
@@ -157,7 +203,7 @@ private extension NewTripViewController {
         let view = UIButton()
         view.titleLabel?.font = .systemFont(ofSize: 14, weight: .regular)
         view.setTitleColor(.white, for: .normal)
-        view.backgroundColor = .darkGray
+        view.backgroundColor = .black
         view.layer.cornerRadius = 12
         return view
     }

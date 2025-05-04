@@ -10,57 +10,17 @@ import Foundation
 final class TripsListPresenter {
 
     weak var view: TripsListViewInput?
-//    var interactor: AuthorizationInteractorInput?
+    var interactor: TripsListInteractorInput?
 
+    private let builder: TripsListViewModelBuilder = TripsListViewModelBuilderImp()
 }
 
 // MARK: TripsListViewOutput
 extension TripsListPresenter: TripsListViewOutput {
     func viewIsReady() {
-//        interactor?.moduleIsReady()
+        interactor?.moduleIsReady()
         view?.setupInitialState()
-        
-        view?.configure(
-            with: TripsListViewModel(
-                trips: [
-                    .init(
-                        imageName: "car.fill",
-                        date: "April 19, 2024",
-                        time: "11:30 - 12:00",
-                        distance: "15,2 km",
-                        style: "Moderate"
-                    ),
-                    .init(
-                        imageName: "car.fill",
-                        date: "April 19, 2024",
-                        time: "11:30 - 12:00",
-                        distance: "15,2 km",
-                        style: "Moderate"
-                    ),
-                    .init(
-                        imageName: "car.fill",
-                        date: "April 19, 2024",
-                        time: "11:30 - 12:00",
-                        distance: "15,2 km",
-                        style: "Moderate"
-                    ),
-                    .init(
-                        imageName: "car.fill",
-                        date: "April 19, 2024",
-                        time: "11:30 - 12:00",
-                        distance: "15,2 km",
-                        style: "Moderate"
-                    ),
-                    .init(
-                        imageName: "car.fill",
-                        date: "April 19, 2024",
-                        time: "11:30 - 12:00",
-                        distance: "15,2 km",
-                        style: "Moderate"
-                    )
-                ]
-            )
-        )
+        interactor?.requestUserTrips()
     }
 
     func cellWasTapped(_ index: IndexPath) {
@@ -70,14 +30,17 @@ extension TripsListPresenter: TripsListViewOutput {
 
 }
 
-//// MARK: AuthorizationInteractorOutput
-//extension ProfilePresenter: AuthorizationInteractorOutput {
-//    func authorizationSuccess() {
-//        print("authorizationSuccess")
-//    }
-//
-//    func authorizationFailed(error: any Error) {
-//        print("authorizationFailed: \(error)")
-//    }
-//
-//}
+// MARK: TripsListInteractorOutput
+extension TripsListPresenter: TripsListInteractorOutput {
+    func tripsRequestSuccess(trips: [TripListInfo]) {
+        view?.configure(
+            with: TripsListViewModel(
+                trips: builder.buildTripsViewModels(trips: trips)
+            )
+        )
+    }
+    
+    func tripsRequestFailed(error: any Error) {
+        print("tripsRequestFailed: \(error)")
+    }
+}

@@ -7,7 +7,7 @@
 
 protocol NewTripViewInput: AnyObject {
     func setupInitialState()
-    func setupReadyToStartState()
-    func setupInProcessState()
+    func setupReadyToStartState(animated: Bool)
+    func setupInProcessState(animated: Bool)
     func updateTimerValue(_ value: String)
 }

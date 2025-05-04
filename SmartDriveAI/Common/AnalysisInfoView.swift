@@ -16,7 +16,7 @@ struct AnalysisInfoViewModel {
 
 final class AnalysisInfoView: UIView {
     private lazy var titleLabel = makeTitleLabel()
-    private lazy var valueLabel = makeTitleLabel()
+    private lazy var valueLabel = makeValueLabel()
     
     init() {
         super.init(frame: .zero)
@@ -50,7 +50,6 @@ private extension AnalysisInfoView {
         
         titleLabel.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview()
-//            make.height.equalTo(60)
         }
         valueLabel.snp.makeConstraints { make in
             make.leading.equalTo(titleLabel.snp.trailing).offset(8)

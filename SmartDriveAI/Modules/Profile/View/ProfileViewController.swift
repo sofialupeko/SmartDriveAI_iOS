@@ -18,9 +18,11 @@ final class ProfileViewController: UIViewController {
     var output: ProfileViewOutput?
 
     private lazy var titleLabel = makeTitleLabel()
+    private lazy var scrollView = makeScrollView()
+    private lazy var stackView = makeStackView()
     private lazy var styleView = DrivingStyleInfoView()
     private lazy var analysisView = AnalysisView()
-    private lazy var signOutButton = makeSignOutButton()
+    private lazy var signOutButtonView = SignOutButtonView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,59 +33,57 @@ final class ProfileViewController: UIViewController {
 // MARK: ProfileViewInput
 extension ProfileViewController: ProfileViewInput {
     func setupInitialState() {
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .coreLightGray
+        signOutButtonView.output = self
         commonInit()
-        addTargets()
     }
     
     func configure(with viewModel: ProfileViewModel) {
+        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
         styleView.configure(with: viewModel.drivingStyle)
+        stackView.addArrangedSubview(styleView)
+
         analysisView.configure(with: viewModel.drivingAnalysis)
+        stackView.addArrangedSubview(analysisView)
+        
+        stackView.addArrangedSubview(signOutButtonView)
+    }
+}
+
+// MARK: SignOutButtonViewOutput
+extension ProfileViewController: SignOutButtonViewOutput {
+    func signOutButtonWasTapped() {
+        output?.signOutButtonWasTapped()
     }
 }
 
 // MARK: Private
 private extension ProfileViewController {
-    func addTargets() {
-        signOutButton.addTarget(
-            self,
-            action: #selector(signOutButtonTapped),
-            for: .touchUpInside
-        )
-    }
-    
-    @objc func signOutButtonTapped() {
-        output?.signOutButtonWasTapped()
-    }
-    
     func commonInit() {
         setupLayout()
         
         titleLabel.text = "Profile"
-        signOutButton.setTitle("Sign out", for: .normal)
     }
     
     func setupLayout() {
         view.addSubview(titleLabel)
-        view.addSubview(styleView)
-        view.addSubview(analysisView)
-        view.addSubview(signOutButton)
+        view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
                 
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(24)
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(24)
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(16)
         }
-        styleView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(24)
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(24)
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
-        analysisView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(24)
-            make.top.equalTo(styleView.snp.bottom).offset(24)
-        }
-        signOutButton.snp.makeConstraints { make in
-            make.top.equalTo(analysisView.snp.bottom).offset(24)
-            make.trailing.equalToSuperview().inset(24)
+        stackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
+            make.bottom.equalToSuperview().priority(.low)
         }
     }
 
@@ -94,18 +94,19 @@ private extension ProfileViewController {
         view.textAlignment = .left
         return view
     }
+    
+    func makeScrollView() -> UIScrollView {
+        let view = UIScrollView()
+        view.showsVerticalScrollIndicator = false
+        view.showsHorizontalScrollIndicator = false
+        view.contentInsetAdjustmentBehavior = .never
+        return view
+    }
 
     func makeStackView() -> UIStackView {
         let view = UIStackView()
         view.axis = .vertical
-        view.spacing = 8
-        return view
-    }
-    
-    func makeSignOutButton() -> UIButton {
-        let view = UIButton()
-        view.titleLabel?.font = .systemFont(ofSize: 14, weight: .regular)
-        view.setTitleColor(.red, for: .normal)
+        view.spacing = 16
         return view
     }
 }

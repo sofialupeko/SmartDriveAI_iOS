@@ -8,47 +8,32 @@
 final class ProfilePresenter {
 
     weak var view: ProfileViewInput?
-//    var interactor: AuthorizationInteractorInput?
+    var interactor: ProfileInteractorInput?
+    var router: ProfileRouterInput?
 
+    private let builder: ProfileViewModelBuilder = ProfileViewModelBuilderImp()
 }
 
 // MARK: ProfileViewOutput
 extension ProfilePresenter: ProfileViewOutput {
     func viewIsReady() {
-//        interactor?.moduleIsReady()
+        interactor?.moduleIsReady()
         view?.setupInitialState()
-        
-        view?.configure(
-            with: ProfileViewModel(
-                drivingStyle: DrivingStyleInfoViewModel(styleName: "Moderate"),
-                drivingAnalysis: AnalysisViewModel(
-                    analysis: [
-                        .init(title: "Trips", value: "345"),
-                        .init(title: "Trips", value: "345"),
-                        .init(title: "Total distance", value: "1254,3 km"),
-                        .init(title: "Trips", value: "345"),
-                        .init(title: "Trips", value: "345"),
-                        .init(title: "Average number of harsh accelerations per trip", value: "12"),
-                        .init(title: "Average number of harsh accelerations per trip", value: "12")
-                    ]
-                )
-            )
-        )
+        interactor?.requestUserProfile()
     }
 
     func signOutButtonWasTapped() {
-        print("signOutButtonWasTapped")
+        router?.showAuthorization()
     }
 }
 
-//// MARK: AuthorizationInteractorOutput
-//extension ProfilePresenter: AuthorizationInteractorOutput {
-//    func authorizationSuccess() {
-//        print("authorizationSuccess")
-//    }
-//    
-//    func authorizationFailed(error: any Error) {
-//        print("authorizationFailed: \(error)")
-//    }
-//    
-//}
+// MARK: ProfileInteractorOutput
+extension ProfilePresenter: ProfileInteractorOutput {
+    func profileRequestSuccess(trip: ProfileInfo) {
+        view?.configure(with: builder.buildProfileViewModel(trip: trip))
+    }
+    
+    func profileRequestFailed(error: any Error) {
+        print("profileRequestFailed: \(error)")
+    }
+}
