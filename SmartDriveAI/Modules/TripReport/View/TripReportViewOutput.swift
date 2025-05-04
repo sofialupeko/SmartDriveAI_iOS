@@ -1,10 +1,10 @@
 //
-//  TripInfoViewOutput.swift
+//  TripReportViewOutput.swift
 //  SmartDriveAI
 //
 //  Created by Lupeko Sofia on 26.04.2025.
 //
 
-protocol TripInfoViewOutput {
+protocol TripReportViewOutput {
     func viewIsReady()
 }

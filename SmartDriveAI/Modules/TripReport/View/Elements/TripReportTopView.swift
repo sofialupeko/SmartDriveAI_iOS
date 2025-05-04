@@ -1,5 +1,5 @@
 //
-//  TripInfoTopView.swift
+//  TripReportTopView.swift
 //  SmartDriveAI
 //
 //  Created by Lupeko Sofia on 26.04.2025.
@@ -8,13 +8,14 @@
 import SnapKit
 import UIKit
 
-struct TripInfoTopViewModel {
+struct TripReportTopViewModel {
     let date: String
     let time: String
-    let style: String
+    let styleName: String
+    let styleColor: UIColor
 }
 
-final class TripInfoTopView: UIView {
+final class TripReportTopView: UIView {
     private lazy var dateLabel = makeDateLabel()
     private lazy var timeLabel = makeTimeLabel()
     private lazy var styleLabel = makeStyleLabel()
@@ -29,14 +30,15 @@ final class TripInfoTopView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with viewModel: TripInfoTopViewModel) {
+    func configure(with viewModel: TripReportTopViewModel) {
         timeLabel.text = viewModel.time
         dateLabel.text = viewModel.date
-        styleLabel.text = viewModel.style
+        styleLabel.text = viewModel.styleName
+        styleLabel.textColor = viewModel.styleColor
     }
 }
 
-private extension TripInfoTopView {
+private extension TripReportTopView {
     func commonInit() {
         setupLayout()
         
@@ -63,7 +65,7 @@ private extension TripInfoTopView {
     
     func makeDateLabel() -> UILabel {
         let view = UILabel()
-        view.textColor = .darkGray
+        view.textColor = .black
         view.font = .systemFont(ofSize: 24, weight: .regular)
         view.textAlignment = .left
         view.numberOfLines = 1
@@ -72,7 +74,7 @@ private extension TripInfoTopView {
     
     func makeTimeLabel() -> UILabel {
         let view = UILabel()
-        view.textColor = .darkGray
+        view.textColor = .black
         view.font = .systemFont(ofSize: 24, weight: .regular)
         view.textAlignment = .left
         view.numberOfLines = 1

@@ -1,5 +1,5 @@
 //
-//  TripInfoRecommendationView.swift
+//  TripReportRecommendationView.swift
 //  SmartDriveAI
 //
 //  Created by Lupeko Sofia on 27.04.2025.
@@ -8,11 +8,7 @@
 import SnapKit
 import UIKit
 
-struct TripInfoRecommendationViewModel {
-    let text: String
-}
-
-final class TripInfoRecommendationView: UIView {
+final class TripReportRecommendationView: UIView {
     private lazy var titleLabel = makeTitleLabel()
     private lazy var icon = makeIconView()
     
@@ -26,12 +22,12 @@ final class TripInfoRecommendationView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with viewModel: TripInfoRecommendationViewModel) {
-        titleLabel.text = viewModel.text
+    func configure(with text: String) {
+        titleLabel.text = text
     }
 }
 
-private extension TripInfoRecommendationView {
+private extension TripReportRecommendationView {
     func commonInit() {
         setupLayout()
         icon.image = UIImage(systemName: "circle.fill")

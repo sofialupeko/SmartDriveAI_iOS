@@ -1,5 +1,5 @@
 //
-//  TripInfoViewController.swift
+//  TripReportViewController.swift
 //  SmartDriveAI
 //
 //  Created by Lupeko Sofia on 26.04.2025.
@@ -8,38 +8,48 @@
 import SnapKit
 import UIKit
 
-struct TripInfoViewModel {
-    let topViewModel: TripInfoTopViewModel
+struct TripReportViewModel {
+    let topViewModel: TripReportTopViewModel
     let analysisViewModel: AnalysisViewModel
-    let recommendationsViewModel: TripInfoRecommendationsViewModel
+    let recommendationsViewModel: TripReportRecommendationsViewModel
 }
 
-final class TripInfoViewController: UIViewController {
+final class TripReportViewController: UIViewController {
 
-    var output: TripInfoViewOutput?
+    var output: TripReportViewOutput?
 
-    private lazy var titleLabel = makeTitleLabel()
+    private lazy var navigationView = TripReportNavigationView()
     private lazy var scrollView = makeScrollView()
     private lazy var stackView = makeStackView()
-    private lazy var topView = TripInfoTopView()
+    private lazy var topView = TripReportTopView()
     private lazy var analysisView = AnalysisView()
-    private lazy var recommendationsView = TripInfoRecommendationsView()
+    private lazy var recommendationsView = TripReportRecommendationsView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         output?.viewIsReady()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.navigationBar.isHidden = false
+    }
 }
 
 // MARK: TripsListViewInput
-extension TripInfoViewController: TripInfoViewInput {
+extension TripReportViewController: TripReportViewInput {
     func setupInitialState() {
-        view.backgroundColor = .lightGray
+        navigationView.output = self
         commonInit()
     }
     
-    func configure(with viewModel: TripInfoViewModel) {
-        stackView.subviews.forEach { $0.removeFromSuperview() }
+    func configure(with viewModel: TripReportViewModel) {
+        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
         topView.configure(with: viewModel.topViewModel)
         stackView.addArrangedSubview(topView)
@@ -52,25 +62,31 @@ extension TripInfoViewController: TripInfoViewInput {
     }
 }
 
+// MARK: TripReportNavigationViewOutput
+extension TripReportViewController: TripReportNavigationViewOutput {
+    func backButtonWasTapped() {
+        navigationController?.popViewController(animated: true)
+    }
+}
+
 // MARK: Private
-private extension TripInfoViewController {
+private extension TripReportViewController {
     
     func commonInit() {
         setupLayout()
-        titleLabel.text = "Trip report"
+        view.backgroundColor = .coreLightGray
     }
     
     func setupLayout() {
-        view.addSubview(titleLabel)
         view.addSubview(scrollView)
         scrollView.addSubview(stackView)
+        view.addSubview(navigationView)
                 
-        titleLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(24)
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(24)
+        navigationView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
         }
         scrollView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(16)
+            make.top.equalTo(navigationView.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(24)
             make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
@@ -79,14 +95,6 @@ private extension TripInfoViewController {
             make.width.equalToSuperview()
             make.bottom.equalToSuperview().priority(.low)
         }
-    }
-    
-    func makeTitleLabel() -> UILabel {
-        let view = UILabel()
-        view.textColor = .black
-        view.font = .systemFont(ofSize: 32, weight: .bold)
-        view.textAlignment = .left
-        return view
     }
     
     func makeScrollView() -> UIScrollView {
@@ -100,7 +108,7 @@ private extension TripInfoViewController {
     func makeStackView() -> UIStackView {
         let view = UIStackView()
         view.axis = .vertical
-        view.spacing = 8
+        view.spacing = 16
         return view
     }
 }

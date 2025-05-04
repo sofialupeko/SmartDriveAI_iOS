@@ -1,5 +1,5 @@
 //
-//  TripInfoRecommendationsView.swift
+//  TripReportRecommendationsView.swift
 //  SmartDriveAI
 //
 //  Created by Lupeko Sofia on 26.04.2025.
@@ -8,11 +8,11 @@
 import SnapKit
 import UIKit
 
-struct TripInfoRecommendationsViewModel {
-    let recommendations: [TripInfoRecommendationViewModel]
+struct TripReportRecommendationsViewModel {
+    let recommendations: [String]
 }
 
-final class TripInfoRecommendationsView: UIView {
+final class TripReportRecommendationsView: UIView {
     private lazy var titleLabel = makeTitleLabel()
     private lazy var stackView = makeStackView()
     
@@ -26,19 +26,20 @@ final class TripInfoRecommendationsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(with viewModel: TripInfoRecommendationsViewModel) {
+    func configure(with viewModel: TripReportRecommendationsViewModel) {
         stackView.subviews.forEach { $0.removeFromSuperview() }
         viewModel.recommendations.forEach {
-            let view = TripInfoRecommendationView()
+            let view = TripReportRecommendationView()
             view.configure(with: $0)
             stackView.addArrangedSubview(view)
         }
     }
 }
 
-private extension TripInfoRecommendationsView {
+private extension TripReportRecommendationsView {
     func commonInit() {
         setupLayout()
+        titleLabel.text = "Recommendations"
         backgroundColor = .white
         layer.cornerRadius = 16
     }
@@ -58,7 +59,7 @@ private extension TripInfoRecommendationsView {
     
     func makeTitleLabel() -> UILabel {
         let view = UILabel()
-        view.textColor = .darkGray
+        view.textColor = .black
         view.font = .systemFont(ofSize: 24, weight: .regular)
         view.textAlignment = .left
         view.numberOfLines = 1
