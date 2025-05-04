@@ -13,7 +13,8 @@ struct TripListCellViewModel {
     let date: String
     let time: String
     let distance: String
-    let style: String
+    let styleName: String
+    let styleColor: UIColor
 }
 
 final class TripListCell: UITableViewCell {
@@ -45,10 +46,12 @@ final class TripListCell: UITableViewCell {
     
     func configure(with viewModel: TripListCellViewModel) {
         image.image = UIImage(systemName: viewModel.imageName)
+        image.tintColor = viewModel.styleColor
         dateLabel.text = viewModel.date
         timeLabel.text = viewModel.time
         distanceLabel.text = viewModel.distance
-        styleLabel.text = viewModel.style
+        styleLabel.text = viewModel.styleName
+        styleLabel.textColor = viewModel.styleColor
     }
 }
 
@@ -82,16 +85,16 @@ private extension TripListCell {
             make.leading.trailing.equalToSuperview()
         }
         image.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(8)
+            make.leading.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
             make.size.equalTo(CGSize(width: 32, height: 32))
         }
         topContainer.snp.makeConstraints { make in
-            make.leading.equalTo(image.snp.trailing).offset(8)
+            make.leading.equalTo(image.snp.trailing).offset(16)
             make.top.trailing.equalToSuperview().inset(8)
         }
         bottomContainer.snp.makeConstraints { make in
-            make.leading.equalTo(image.snp.trailing).offset(8)
+            make.leading.equalTo(image.snp.trailing).offset(16)
             make.bottom.trailing.equalToSuperview().inset(8)
             make.top.greaterThanOrEqualTo(topContainer.snp.bottom).offset(4)
         }

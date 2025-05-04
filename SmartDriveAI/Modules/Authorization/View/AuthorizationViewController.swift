@@ -124,7 +124,7 @@ private extension AuthorizationViewController {
             make.bottom.equalTo(emailInputView.snp.top).offset(-32)
         }
         emailInputView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview().offset(-24)
+            make.centerY.equalToSuperview().offset(-32)
             make.leading.trailing.equalToSuperview().inset(24)
         }
         passwordInputView.snp.makeConstraints { make in
@@ -153,7 +153,7 @@ private extension AuthorizationViewController {
 
     func makeTitleLabel() -> UILabel {
         let view = UILabel()
-        view.textColor = .darkGray
+        view.textColor = .black
         view.font = .systemFont(ofSize: 24, weight: .bold)
         view.textAlignment = .center
         return view
@@ -163,7 +163,7 @@ private extension AuthorizationViewController {
         let view = UIButton()
         view.titleLabel?.font = .systemFont(ofSize: 14, weight: .regular)
         view.setTitleColor(.white, for: .normal)
-        view.backgroundColor = .darkGray
+        view.backgroundColor = .black
         view.layer.cornerRadius = 12
         return view
     }
@@ -179,14 +179,14 @@ private extension AuthorizationViewController {
     func makeChangeAuthProcessButton() -> UIButton {
         let view = UIButton()
         view.titleLabel?.font = .systemFont(ofSize: 14, weight: .regular)
-        view.setTitleColor(.red, for: .normal)
+        view.setTitleColor(.coreRed, for: .normal)
         return view
     }
     
     func makeSkipButton() -> UIButton {
         let view = UIButton()
         view.titleLabel?.font = .systemFont(ofSize: 14, weight: .regular)
-        view.setTitleColor(.red, for: .normal)
+        view.setTitleColor(.coreRed, for: .normal)
         return view
     }
 }

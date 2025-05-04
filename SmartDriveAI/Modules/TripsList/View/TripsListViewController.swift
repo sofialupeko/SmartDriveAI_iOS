@@ -30,7 +30,7 @@ final class TripsListViewController: UIViewController {
 // MARK: TripsListViewInput
 extension TripsListViewController: TripsListViewInput {
     func setupInitialState() {
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .coreLightGray
         commonInit()
         configureTableView()
     }
@@ -83,22 +83,22 @@ extension TripsListViewController: UITableViewDelegate {
         output?.cellWasTapped(indexPath)
         
         navigationController?.pushViewController(
-            configureTripInfoModule(),
+            configureTripReportModule(),
             animated: true
         )
     }
     
-    func configureTripInfoModule() -> UIViewController {
-        let vc = TripInfoViewController()
+    func configureTripReportModule() -> UIViewController {
+        let vc = TripReportViewController()
         vc.modalPresentationStyle = .overFullScreen
         
-        let presenter = TripInfoPresenter()
+        let presenter = TripReportPresenter()
         vc.output = presenter
         presenter.view = vc
 
-//        let interactor = ProfileInteractor()
-//        presenter.interactor = interactor
-//        interactor.output = presenter
+        let interactor = TripReportInteractor()
+        presenter.interactor = interactor
+        interactor.output = presenter
         
         return vc
     }
@@ -131,7 +131,7 @@ private extension TripsListViewController {
                 
         titleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(24)
-            make.top.equalTo(view.safeAreaLayoutGuide).inset(24)
+            make.top.equalTo(view.safeAreaLayoutGuide).inset(16)
         }
         tableView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom)
@@ -150,7 +150,7 @@ private extension TripsListViewController {
 
     func makeTableView() -> UITableView {
         let view = UITableView()
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .coreLightGray
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
         view.allowsMultipleSelection = false

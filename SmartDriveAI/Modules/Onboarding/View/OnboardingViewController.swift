@@ -68,7 +68,7 @@ private extension OnboardingViewController {
         let view = UIButton()
         view.titleLabel?.font = .systemFont(ofSize: 14, weight: .regular)
         view.setTitleColor(.white, for: .normal)
-        view.backgroundColor = .darkGray
+        view.backgroundColor = .black
         view.layer.cornerRadius = 12
         return view
     }

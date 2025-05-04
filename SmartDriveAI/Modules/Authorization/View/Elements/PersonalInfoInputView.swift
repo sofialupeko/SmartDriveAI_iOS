@@ -79,7 +79,7 @@ private extension PersonalInfoInputView {
     
     func makeTitleLabel() -> UILabel {
         let view = UILabel()
-        view.textColor = .darkGray
+        view.textColor = .black
         view.font = .systemFont(ofSize: 18, weight: .regular)
         view.textAlignment = .left
         return view
