@@ -16,7 +16,14 @@ protocol DataCollectorDelegate: AnyObject {
     func sensorsError()
 }
 
-final class DataCollector: NSObject, CLLocationManagerDelegate {
+protocol DataCollector {
+    var delegate: DataCollectorDelegate? { get set }
+    
+    func startCollectData()
+    func stopAndSave()
+}
+
+final class DataCollectorImp: NSObject, DataCollector {
     weak var delegate: DataCollectorDelegate?
     
     private let motionManager = CMMotionManager()
@@ -58,19 +65,6 @@ final class DataCollector: NSObject, CLLocationManagerDelegate {
         delegate?.collectDataStart()
     }
     
-    // Обработка обновлений GPS
-    func locationManager(
-        _ manager: CLLocationManager,
-        didUpdateLocations locations: [CLLocation]
-    ) {
-        guard let location = locations.last else { return }
-        let timestamp = Date()
-        
-        let entry = "\(timestamp),\(currentAcc.x),\(currentAcc.y),\(currentAcc.z),\(currentGyro.x),\(currentGyro.y),\(currentGyro.z),\(location.speed * 3.6),\(location.coordinate.latitude),\(location.coordinate.longitude)\n"
-        
-        data.append(entry)
-    }
-    
     // Сохранение данных в файл
     func stopAndSave() {
         motionManager.stopAccelerometerUpdates()
@@ -97,4 +91,19 @@ final class DataCollector: NSObject, CLLocationManagerDelegate {
     // Текущие значения датчиков
     private var currentAcc = (x: 0.0, y: 0.0, z: 0.0)
     private var currentGyro = (x: 0.0, y: 0.0, z: 0.0)
+}
+
+extension DataCollectorImp: CLLocationManagerDelegate {
+    // Обработка обновлений GPS
+    func locationManager(
+        _ manager: CLLocationManager,
+        didUpdateLocations locations: [CLLocation]
+    ) {
+        guard let location = locations.last else { return }
+        let timestamp = Date()
+        
+        let entry = "\(timestamp),\(currentAcc.x),\(currentAcc.y),\(currentAcc.z),\(currentGyro.x),\(currentGyro.y),\(currentGyro.z),\(location.speed * 3.6),\(location.coordinate.latitude),\(location.coordinate.longitude)\n"
+        
+        data.append(entry)
+    }
 }

@@ -9,7 +9,7 @@ import UIKit
 
 final class ViewController: UIViewController {
     
-    lazy var dataCollector = DataCollector()
+    lazy var dataCollector = DataCollectorImp()
     
     private var startStopButton = UIButton()
     private var infoLabel = UILabel()
