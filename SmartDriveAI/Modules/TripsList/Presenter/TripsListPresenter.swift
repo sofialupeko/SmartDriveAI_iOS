@@ -11,6 +11,7 @@ final class TripsListPresenter {
 
     weak var view: TripsListViewInput?
     var interactor: TripsListInteractorInput?
+    var router: TripsListRouterInput?
 
     private let builder: TripsListViewModelBuilder = TripsListViewModelBuilderImp()
 }
@@ -24,10 +25,9 @@ extension TripsListPresenter: TripsListViewOutput {
     }
 
     func cellWasTapped(_ index: IndexPath) {
-        print("cellWasTapped: \(index)")
-        
+        let tripID = "123"
+        router?.openTripReport(for: tripID)
     }
-
 }
 
 // MARK: TripsListInteractorOutput

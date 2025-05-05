@@ -10,6 +10,7 @@ import UIKit
 
 struct DrivingStyleInfoViewModel {
     let styleName: String
+    let styleColor: UIColor
 }
 
 final class DrivingStyleInfoView: UIView {
@@ -28,6 +29,7 @@ final class DrivingStyleInfoView: UIView {
     
     func configure(with viewModel: DrivingStyleInfoViewModel) {
         styleNameLabel.text = viewModel.styleName
+        styleNameLabel.textColor = viewModel.styleColor
     }
 }
 

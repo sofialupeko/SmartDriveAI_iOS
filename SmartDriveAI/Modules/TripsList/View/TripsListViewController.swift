@@ -81,26 +81,6 @@ extension TripsListViewController: UITableViewDelegate {
             animated: false
         )
         output?.cellWasTapped(indexPath)
-        
-        navigationController?.pushViewController(
-            configureTripReportModule(),
-            animated: true
-        )
-    }
-    
-    func configureTripReportModule() -> UIViewController {
-        let vc = TripReportViewController()
-        vc.modalPresentationStyle = .overFullScreen
-        
-        let presenter = TripReportPresenter()
-        vc.output = presenter
-        presenter.view = vc
-
-        let interactor = TripReportInteractor()
-        presenter.interactor = interactor
-        interactor.output = presenter
-        
-        return vc
     }
     
     func tableView(

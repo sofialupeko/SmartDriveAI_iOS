@@ -110,6 +110,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         presenter.interactor = interactor
         interactor.output = presenter
         
+        let router = TripsListRouter()
+        presenter.router = router
+        router.view = vc
+        
         return UINavigationController(rootViewController: vc)
     }
 }
