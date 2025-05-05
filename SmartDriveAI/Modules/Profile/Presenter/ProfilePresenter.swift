@@ -29,8 +29,8 @@ extension ProfilePresenter: ProfileViewOutput {
 
 // MARK: ProfileInteractorOutput
 extension ProfilePresenter: ProfileInteractorOutput {
-    func profileRequestSuccess(trip: ProfileInfo) {
-        view?.configure(with: builder.buildProfileViewModel(trip: trip))
+    func profileRequestSuccess(profile: ProfileInfo) {
+        view?.configure(with: builder.buildProfileViewModel(profile: profile))
     }
     
     func profileRequestFailed(error: any Error) {

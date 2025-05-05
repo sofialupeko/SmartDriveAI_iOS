@@ -8,7 +8,12 @@
 import Foundation
 
 struct ProfileAnalysis {
-    let distance: Double
-    let duration: TimeInterval
+    let tripsNumber: Int
+    let totalDistance: Double
+    let totalDuration: TimeInterval
     let averageSpeed: Double
+    let averageBrakesNumber: Int
+    let averageAccelsNumber: Int
+    let averageGyroRate: Double
+    let averageTurnsNumber: Int
 }

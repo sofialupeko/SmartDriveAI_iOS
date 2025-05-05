@@ -6,6 +6,6 @@
 //
 
 protocol ProfileInteractorOutput: AnyObject {
-    func profileRequestSuccess(trip: ProfileInfo)
+    func profileRequestSuccess(profile: ProfileInfo)
     func profileRequestFailed(error: Error)
 }

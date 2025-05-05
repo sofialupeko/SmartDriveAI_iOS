@@ -20,14 +20,19 @@ extension ProfileInteractor: ProfileInteractorInput {
     
     func requestUserProfile() {
         let analysis = ProfileAnalysis(
-            distance: 578,
-            duration: 189,
-            averageSpeed: 48
+            tripsNumber: 3,
+            totalDistance: 284.2,
+            totalDuration: 343.7,
+            averageSpeed: 72.5,
+            averageBrakesNumber: 7,
+            averageAccelsNumber: 4,
+            averageGyroRate: 0.2,
+            averageTurnsNumber: 3
         )
         let profile = ProfileInfo(
             drivingStyle: .moderate,
             analysis: analysis
         )
-        output?.profileRequestSuccess(trip: profile)
+        output?.profileRequestSuccess(profile: profile)
     }
 }

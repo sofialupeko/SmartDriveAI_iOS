@@ -32,7 +32,19 @@ final class TripReportViewModelBuilderImp: TripReportViewModelBuilder {
                 .init(
                     title: "Average speed",
                     value: formatSpeed(trip.analysis.averageSpeed)
-                )
+                ),
+                .init(
+                    title: "Number of hard accelerations",
+                    value: formatCount(trip.analysis.accelsNumber)
+                ),
+                .init(
+                    title: "Number of hard brakes",
+                    value: formatCount(trip.analysis.brakesNumber)
+                ),
+                .init(
+                    title: "Number of sharp turns",
+                    value: formatCount(trip.analysis.turnsNumber)
+                ),
             ]
         )
         let recommendationsVM = TripReportRecommendationsViewModel(
@@ -69,5 +81,9 @@ final class TripReportViewModelBuilderImp: TripReportViewModelBuilder {
     
     private func formatSpeed(_ speed: Double) -> String {
         return String("\(speed) km/h")
+    }
+    
+    private func formatCount(_ value: Int) -> String {
+        return String("\(value)")
     }
 }

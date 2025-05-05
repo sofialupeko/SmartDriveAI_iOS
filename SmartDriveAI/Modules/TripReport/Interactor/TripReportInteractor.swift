@@ -23,14 +23,19 @@ extension TripReportInteractor: TripReportInteractorInput {
             id: id,
             startDateTime: Date(),
             analysis: .init(
-                distance: 733.9,
-                duration: 287.2,
-                averageSpeed: 102.1
+                distance: 83.6,
+                duration: 109.4,
+                averageSpeed: 88.9,
+                brakesNumber: 2,
+                accelsNumber: 5,
+                turnsNumber: 2,
+                averageGyroRate: 0.3
             ),
-            drivingStyle: .aggressive,
+            drivingStyle: .moderate,
             recommendations: [
                 "Use cruise control",
-                "Avoid sudden braking"
+                "Avoid sudden braking",
+                "Increase following distance"
             ]
         )
         output?.tripRequestSuccess(trip: trip)

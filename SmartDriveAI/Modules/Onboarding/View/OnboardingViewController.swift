@@ -34,7 +34,7 @@ private extension OnboardingViewController {
     }
     
     func commonInit() {
-        view.backgroundColor = .white
+        view.backgroundColor = .coreLightGray
         setupLayout()
         addTargets()
         

@@ -8,29 +8,45 @@
 import Foundation
 
 protocol ProfileViewModelBuilder {
-    func buildProfileViewModel(trip: ProfileInfo) -> ProfileViewModel
+    func buildProfileViewModel(profile: ProfileInfo) -> ProfileViewModel
 }
 
 final class ProfileViewModelBuilderImp: ProfileViewModelBuilder {
-    func buildProfileViewModel(trip: ProfileInfo) -> ProfileViewModel {
+    func buildProfileViewModel(profile: ProfileInfo) -> ProfileViewModel {
         let styleVM = DrivingStyleInfoViewModel(
-            styleName: trip.drivingStyle.name,
-            styleColor: trip.drivingStyle.color
+            styleName: profile.drivingStyle.name,
+            styleColor: profile.drivingStyle.color
         )
         let analysisVM = AnalysisViewModel(
             analysis: [
                 .init(
-                    title: "Distance",
-                    value: formatDistance(trip.analysis.distance)
+                    title: "Trips number",
+                    value: formatCount(profile.analysis.tripsNumber)
                 ),
                 .init(
-                    title: "Duration",
-                    value: formatDuration(trip.analysis.duration)
+                    title: "Total distance",
+                    value: formatDistance(profile.analysis.totalDistance)
+                ),
+                .init(
+                    title: "Total duration",
+                    value: formatDuration(profile.analysis.totalDuration)
                 ),
                 .init(
                     title: "Average speed",
-                    value: formatSpeed(trip.analysis.averageSpeed)
-                )
+                    value: formatSpeed(profile.analysis.averageSpeed)
+                ),
+                .init(
+                    title: "Average number of hard accelerations per trip",
+                    value: formatCount(profile.analysis.averageAccelsNumber)
+                ),
+                .init(
+                    title: "Average number of hard brakes per trip",
+                    value: formatCount(profile.analysis.averageBrakesNumber)
+                ),
+                .init(
+                    title: "Average number of sharp turns per trip",
+                    value: formatCount(profile.analysis.averageTurnsNumber)
+                ),
             ]
         )
             
@@ -50,5 +66,9 @@ final class ProfileViewModelBuilderImp: ProfileViewModelBuilder {
     
     private func formatSpeed(_ speed: Double) -> String {
         return String("\(speed) km/h")
+    }
+    
+    private func formatCount(_ value: Int) -> String {
+        return String("\(value)")
     }
 }

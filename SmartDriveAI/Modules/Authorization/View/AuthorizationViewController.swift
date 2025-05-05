@@ -30,7 +30,7 @@ final class AuthorizationViewController: UIViewController {
 // MARK: AuthorizationViewInput
 extension AuthorizationViewController: AuthorizationViewInput {
     func setupInitialState() {
-        view.backgroundColor = .white
+        view.backgroundColor = .coreLightGray
         commonInit()
         addTargets()
         setupSignUpState()
@@ -107,6 +107,7 @@ private extension AuthorizationViewController {
         changeAuthProcessButton.setTitle("Log in", for: .normal)
         changeAuthProcessButton.setTitle("Sign up", for: .selected)
         skipButton.setTitle("Skip", for: .normal)
+        skipButton.isHidden = true
     }
     
     func setupLayout() {
